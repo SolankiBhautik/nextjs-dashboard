@@ -1,0 +1,78 @@
+[1mdiff --git a/app/lib/data.ts b/app/lib/data.ts[m
+[1mindex f2b11ff..6f0be99 100644[m
+[1m--- a/app/lib/data.ts[m
+[1m+++ b/app/lib/data.ts[m
+[36m@@ -9,22 +9,20 @@[m [mimport {[m
+   Revenue,[m
+ } from './definitions';[m
+ import { formatCurrency } from './utils';[m
+[32m+[m[32mimport { unstable_noStore as noStore } from 'next/cache';[m
+[32m+[m
+ [m
+ export async function fetchRevenue() {[m
+   // Add noStore() here to prevent the response from being cached.[m
+   // This is equivalent to in fetch(..., {cache: 'no-store'}).[m
+[32m+[m[32m  noStore();[m
+ [m
+   try {[m
+     // Artificially delay a response for demo purposes.[m
+     // Don't do this in production :)[m
+ [m
+[31m-    console.log('Fetching revenue data...');[m
+[31m-    await new Promise((resolve) => setTimeout(resolve, 3000));[m
+[31m-[m
+     const data = await sql<Revenue>`SELECT * FROM revenue`;[m
+ [m
+[31m-    console.log('Data fetch completed after 3 seconds.');[m
+[31m-[m
+     return data.rows;[m
+   } catch (error) {[m
+     console.error('Database Error:', error);[m
+[36m@@ -33,6 +31,7 @@[m [mexport async function fetchRevenue() {[m
+ }[m
+ [m
+ export async function fetchLatestInvoices() {[m
+[32m+[m[32m  noStore();[m
+   try {[m
+     const data = await sql<LatestInvoiceRaw>`[m
+       SELECT invoices.amount, customers.name, customers.image_url, customers.email, invoices.id[m
+[36m@@ -53,6 +52,7 @@[m [mexport async function fetchLatestInvoices() {[m
+ }[m
+ [m
+ export async function fetchCardData() {[m
+[32m+[m[32m  noStore();[m
+   try {[m
+     // You can probably combine these into a single SQL query[m
+     // However, we are intentionally splitting them to demonstrate[m
+[36m@@ -92,6 +92,7 @@[m [mexport async function fetchFilteredInvoices([m
+   query: string,[m
+   currentPage: number,[m
+ ) {[m
+[32m+[m[32m  noStore();[m
+   const offset = (currentPage - 1) * ITEMS_PER_PAGE;[m
+ [m
+   try {[m
+[36m@@ -124,6 +125,7 @@[m [mexport async function fetchFilteredInvoices([m
+ }[m
+ [m
+ export async function fetchInvoicesPages(query: string) {[m
+[32m+[m[32m  noStore();[m
+   try {[m
+     const count = await sql`SELECT COUNT(*)[m
+     FROM invoices[m
+[36m@@ -145,6 +147,7 @@[m [mexport async function fetchInvoicesPages(query: string) {[m
+ }[m
+ [m
+ export async function fetchInvoiceById(id: string) {[m
+[32m+[m[32m  noStore();[m
+   try {[m
+     const data = await sql<InvoiceForm>`[m
+       SELECT[m
+[36m@@ -188,6 +191,7 @@[m [mexport async function fetchCustomers() {[m
+ }[m
+ [m
+ export async function fetchFilteredCustomers(query: string) {[m
+[32m+[m[32m  noStore();[m
+   try {[m
+     const data = await sql<CustomersTableType>`[m
+ 		SELECT[m
